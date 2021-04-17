@@ -16,6 +16,7 @@ public interface MovieService {
     Call<MovieResponse> getMoviesByQuery(@Query("api_key") String api_key,
                                          @Query("query") String query);
 
-    @GET("photos/{albumId}")
-    Call<Movie> getMovieById(@Path("albumId") String albumId);
+    @GET("movie/{movie_id}?")
+    Call<Movie> getMovieById(@Path("movie_id") String movie_id,
+                             @Query("api_key") String api_key);
 }

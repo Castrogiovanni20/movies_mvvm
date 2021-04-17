@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
     @Override
     public void onMovieClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra("plato", movie);
+        intent.putExtra("movie", movie);
         startActivity(intent);
     }
 }
