@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetroInstance {
 
     public static String BASE_URL = "https://api.themoviedb.org/3/";
-
     private static Retrofit retrofit;
 
     public static Retrofit getRetroClient() {

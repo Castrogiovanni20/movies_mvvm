@@ -14,8 +14,8 @@ import com.aprc.appmvvm.viewmodel.MovieDetailViewModel;
 import com.bumptech.glide.Glide;
 
 public class MovieDetailActivity extends AppCompatActivity {
-    private TextView tvOriginalTitle, tvOverview;
-    private ImageView ivPoster_path;
+    private TextView textViewOriginalTitle, textViewOverView;
+    private ImageView imageViewPosterPath;
     private Movie movie;
     private MovieDetailViewModel movieDetailViewModel;
 
@@ -29,25 +29,28 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         setView();
+        setViewModel();
     }
 
-    private void setView(){
-        movieDetailViewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
-        tvOriginalTitle = findViewById(R.id.tvOriginal_title);
-        tvOverview = findViewById(R.id.tvOverview);
-        ivPoster_path = findViewById(R.id.ivPoster_path);
+    private void setView() {
+        textViewOriginalTitle = findViewById(R.id.TextViewOriginalTitle);
+        textViewOverView = findViewById(R.id.TextViewOverView);
+        imageViewPosterPath = findViewById(R.id.ImageViewPosterPath);
+    }
 
+    private void setViewModel() {
+        movieDetailViewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
         movieDetailViewModel.getMovieById(movie.getId());
-        movieDetailViewModel.getLiveDataPlato().observe(this, platoObj -> {
-            if (platoObj != null){
-                this.movie = platoObj;
-                String URL = platoObj.getPoster_path();
-                tvOriginalTitle.setText(this.movie.getOriginal_title());
-                tvOverview.setText(this.movie.getOverview());
+        movieDetailViewModel.getLiveDataMovie().observe(this, movieObj -> {
+            if (movieObj != null){
+                this.movie = movieObj;
+                String URL = movieObj.getPoster_path();
+                textViewOriginalTitle.setText(this.movie.getOriginal_title());
+                textViewOverView.setText(this.movie.getOverview());
 
                 Glide.with(MovieDetailActivity.this)
                         .load("https://image.tmdb.org/t/p/original/" + URL)
-                        .into(ivPoster_path);
+                        .into(imageViewPosterPath);
             }
         });
     }

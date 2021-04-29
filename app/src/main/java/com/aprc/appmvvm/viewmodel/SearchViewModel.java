@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.aprc.appmvvm.data.model.Movie;
+import com.aprc.appmvvm.data.repository.MovieRepository;
 import com.aprc.appmvvm.data.repository.MovieService;
 import com.aprc.appmvvm.data.repository.RetroInstance;
 import com.aprc.appmvvm.data.response.MovieResponse;
@@ -18,36 +19,28 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SearchViewModel extends ViewModel {
-    private MovieService movieService;
+    private MovieRepository movieRepository;
     private MutableLiveData<List<Movie>> movieListLiveData;
-    private List<Movie> movieList; // No se esta usando, por que no agregamos nada a la lista todavia
+    private MutableLiveData<Boolean> loadingLiveData;
 
     public SearchViewModel() {
-        movieService = RetroInstance.getRetroClient().create(MovieService.class);
-        movieListLiveData = new MutableLiveData<>();
-        movieList = new ArrayList<>();
+        movieRepository = new MovieRepository();
+        movieListLiveData = movieRepository.getMovieListLiveData();
+        loadingLiveData = new MutableLiveData<>();
+
     }
 
     public MutableLiveData<List<Movie>> getMoviesLiveData(){
         return movieListLiveData;
     }
 
-    public void getMoviesByQuery(String query){
-        Call<MovieResponse> call = movieService.getMoviesByQuery("c5288b68f9495429780937c7acd6f748", query);
-        call.enqueue(new Callback<MovieResponse>() {
-            @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                movieList = response.body().getMovies();
-                movieListLiveData.postValue(movieList);
-                Log.d("API", "Respondio la API " + response.code());
-            }
+    public MutableLiveData<Boolean> getLoadingLiveData() {
+        return loadingLiveData;
+    }
 
-            @Override
-            public void onFailure(Call<MovieResponse> call, Throwable t) {
-                movieListLiveData.postValue(null);
-                Log.d("API", "Fallo la API" + t.getMessage());
-            }
-        });
+    public void getMoviesByQuery(String query){
+        loadingLiveData.setValue(true);
+        movieRepository.getMoviesByQuery(query);
     }
 
     @Override

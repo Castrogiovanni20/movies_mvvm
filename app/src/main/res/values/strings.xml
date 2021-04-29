@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AppMVVM</string>
+
+    <string name="no_results_found">No results found</string>
+    <string name="type_to_search_here">Type to search here</string>
 </resources>

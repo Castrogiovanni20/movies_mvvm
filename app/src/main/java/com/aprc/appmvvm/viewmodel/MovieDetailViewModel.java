@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.aprc.appmvvm.data.model.Movie;
+import com.aprc.appmvvm.data.repository.MovieRepository;
 import com.aprc.appmvvm.data.repository.MovieService;
 import com.aprc.appmvvm.data.repository.RetroInstance;
 import com.aprc.appmvvm.data.response.MovieResponse;
@@ -19,33 +20,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieDetailViewModel extends ViewModel {
-    private MovieService movieService;
-    private MutableLiveData<Movie> moviesLiveData;
+    private MovieRepository movieRepository;
+    private MutableLiveData<Movie> movieLiveData;
+    private MutableLiveData<Boolean> loadingLiveData;
 
     public MovieDetailViewModel() {
-        this.movieService = RetroInstance.getRetroClient().create(MovieService.class);
-        moviesLiveData = new MutableLiveData<>();
+        movieRepository = new MovieRepository();
+        movieLiveData = movieRepository.getMovieLiveData();
+        loadingLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<Movie> getLiveDataPlato() {
-        return moviesLiveData;
+    public LiveData<Movie> getLiveDataMovie() {
+        return movieLiveData;
+    }
+
+    public MutableLiveData<Boolean> getLoadingLiveData() {
+        return loadingLiveData;
     }
 
     public void getMovieById(String movieID){
-        Call<Movie> call =  movieService.getMovieById(movieID, "c5288b68f9495429780937c7acd6f748");
-        call.enqueue(new Callback<Movie>() {
-            @Override
-            public void onResponse(Call<Movie> call, Response<Movie> response) {
-                moviesLiveData.postValue(response.body());
-                Log.d("API", "Respondio la API " + response.code());
-            }
-
-            @Override
-            public void onFailure(Call<Movie> call, Throwable t) {
-                moviesLiveData.postValue(null);
-                Log.d("API", "Fallo la API" + t.getMessage());
-            }
-        });
+        movieRepository.getMoveById(movieID);
     }
 
     @Override

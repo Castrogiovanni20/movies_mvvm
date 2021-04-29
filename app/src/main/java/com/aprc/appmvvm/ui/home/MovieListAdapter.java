@@ -42,10 +42,10 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.movi
     @Override
     public void onBindViewHolder(@NonNull movieListHolder holder, int position) {
         String URL = this.movieList.get(position).getPoster_path();
-        holder.tvTitle.setText(this.movieList.get(position).getOriginal_title());
+        holder.textViewTitle.setText(this.movieList.get(position).getOriginal_title());
         Glide.with(context)
                 .load("https://image.tmdb.org/t/p/original/" + URL)
-                .into(holder.ivThumbnail);
+                .into(holder.imageViewThumbnail);
         //Picasso.get().load(URL).into(holder.ivThumbnail);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -65,13 +65,13 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.movi
     }
 
     public class movieListHolder extends RecyclerView.ViewHolder {
-        private ImageView ivThumbnail;
-        private TextView tvTitle;
+        private ImageView imageViewThumbnail;
+        private TextView textViewTitle;
 
         public movieListHolder(View itemView) {
             super(itemView);
-            ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            imageViewThumbnail = itemView.findViewById(R.id.ImageViewThumbnail);
+            textViewTitle = itemView.findViewById(R.id.TextViewTitle);
 
         }
     }
